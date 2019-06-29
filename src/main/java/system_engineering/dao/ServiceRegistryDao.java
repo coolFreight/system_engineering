@@ -5,7 +5,7 @@
  */
 package system_engineering.dao;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -14,5 +14,5 @@ import java.util.List;
 public interface ServiceRegistryDao {
     boolean registerService(String serviceName, String ip);
     boolean deregisterService(String serviceName);
-    List<String> queryServiceIp(String serviceName);
+    Set<String> queryServiceIp(String serviceName);
 }

@@ -5,7 +5,7 @@
  */
 package system_engineering;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -14,5 +14,5 @@ import java.util.List;
 public interface Registry {
     void register(String serviceName, String ip);
     void deregister(String serviceName);
-    List<String> query(String serviceName);
+    Set<String> query(String serviceName);
 }

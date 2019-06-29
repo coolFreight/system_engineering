@@ -7,6 +7,8 @@ package system_engineering;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
 import system_engineering.dao.ServiceRegistryDao;
 import system_engineering.dao.StubServiceRegistryDao;
 
@@ -33,7 +35,7 @@ public class ServiceRegistry implements Registry {
     }
 
     @Override
-    public List<String> query(String serviceName) {
+    public Set<String> query(String serviceName) {
         return dao.queryServiceIp(serviceName);
     }
     
@@ -62,8 +64,8 @@ public class ServiceRegistry implements Registry {
                 case 3:
                     System.out.println("Enter service name");
                     String queriedService = sc.next();
-                    List<String> services = sr.query(queriedService);
-                    services.stream().forEach(System.out::println);
+                    Set<String> ips = sr.query(queriedService);
+                    ips.stream().forEach(System.out::println);
                 break;
             }
         } while (!sc.nextLine().equals("quit"));

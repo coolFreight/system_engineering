@@ -20,18 +20,26 @@ public class StubServiceRegistryDao implements ServiceRegistryDao {
     
     @Override
     public boolean registerService(String serviceName, String ip) {
-        Set<String> ips = serviceRegistry.getOrDefault(serviceName, new HashSet<String>());
-        return ips.add(serviceName);
+        Set<String> ips = serviceRegistry.getOrDefault(serviceName, new HashSet<>());
+        serviceRegistry.putIfAbsent(serviceName, ips);
+        return ips.add(ip);
     }
 
     @Override
     public boolean deregisterService(String serviceName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(serviceRegistry.containsKey(serviceName)) {
+            serviceRegistry.remove(serviceName);
+            System.out.println(serviceName + " has been deregistered");
+            return true;
+        }
+        System.out.println(serviceName + " is not registered.");
+        return false;
     }
 
     @Override
-    public List<String> queryServiceIp(String serviceName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Set<String> queryServiceIp(String serviceName) {
+        Set<String> ips =  serviceRegistry.getOrDefault(serviceName, new HashSet<>());
+        System.out.println("There are "+ips.size()+" ips for service : "+serviceName);
+        return ips;
     }
-    
 }
