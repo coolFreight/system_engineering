@@ -25,10 +25,9 @@ public class ServiceRegistry implements Registry {
         this.dao = dao;
     }
 
-
     /**
      *
-     * health check is used to 
+     * health check URL is used to determine if a service is still responsive, if not the service will be deregistered
      *
      * @param serviceName
      * @param ip
@@ -48,10 +47,7 @@ public class ServiceRegistry implements Registry {
     public RegisteredService query(String serviceName) {
         return dao.queryServiceIp(serviceName);
     }
-    
-    
-    
-   
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ServiceRegistry sr = new ServiceRegistry(new MySqlServiceRegistryDao());
@@ -87,5 +83,4 @@ public class ServiceRegistry implements Registry {
         System.out.println("2) deregister a service");
         System.out.println("3) query a ip");
     }
-    
 }
