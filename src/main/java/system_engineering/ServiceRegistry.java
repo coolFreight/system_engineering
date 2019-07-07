@@ -5,16 +5,17 @@
  */
 package system_engineering;
 
-import java.util.List;
+import java.net.URL;
 import java.util.Scanner;
 import java.util.Set;
 
+import system_engineering.dao.MySqlServiceRegistryDao;
 import system_engineering.dao.ServiceRegistryDao;
-import system_engineering.dao.StubServiceRegistryDao;
+import system_engineering.model.RegisteredService;
 
 /**
  *
- * @author jovaughnlockridge1
+ *
  */
 public class ServiceRegistry implements Registry {
     
@@ -23,9 +24,18 @@ public class ServiceRegistry implements Registry {
     public ServiceRegistry(ServiceRegistryDao dao){
         this.dao = dao;
     }
-    
+
+
+    /**
+     *
+     * health check is used to 
+     *
+     * @param serviceName
+     * @param ip
+     * @param healthCheckUrl
+     */
     @Override
-    public void register(String serviceName, String ip) {
+    public void register(String serviceName, String ip, URL healthCheckUrl) {
         dao.registerService(serviceName, ip);
     }
 
@@ -35,7 +45,7 @@ public class ServiceRegistry implements Registry {
     }
 
     @Override
-    public Set<String> query(String serviceName) {
+    public RegisteredService query(String serviceName) {
         return dao.queryServiceIp(serviceName);
     }
     
@@ -44,7 +54,7 @@ public class ServiceRegistry implements Registry {
    
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ServiceRegistry sr = new ServiceRegistry(new StubServiceRegistryDao());
+        ServiceRegistry sr = new ServiceRegistry(new MySqlServiceRegistryDao());
         do{
             printMenu();
             int command = sc.nextInt();
@@ -54,7 +64,7 @@ public class ServiceRegistry implements Registry {
                     String service = sc.next();
                     System.out.println("Enter service ip");
                     String ip = sc.next();
-                    sr.register(service, ip);
+                    sr.register(service, ip, null);
                 break;
                 case 2:
                     System.out.println("Enter service name");
@@ -64,8 +74,7 @@ public class ServiceRegistry implements Registry {
                 case 3:
                     System.out.println("Enter service name");
                     String queriedService = sc.next();
-                    Set<String> ips = sr.query(queriedService);
-                    ips.stream().forEach(System.out::println);
+                    RegisteredService ips = sr.query(queriedService);
                 break;
             }
         } while (!sc.nextLine().equals("quit"));

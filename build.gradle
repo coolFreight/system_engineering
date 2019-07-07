@@ -13,18 +13,8 @@ plugins {
     // Apply the application plugin to add support for building an application
     id 'application'
     
-//    id "io.swagger.core.v3.swagger-gradle-plugin" version "2.0.9-SNAPSHOT"
-  
 }
-//
-//resolve {
-//    outputFileName = 'ServiceRegistryApi'
-//    outputFormat = 'JSON'
-//    prettyPrint = 'TRUE'
-//    classpath = sourceSets.main.runtimeClasspath
-//    resourcePackages = ['io.test']
-//    outputPath = 'test'
-//}
+
 
 run {
     standardInput = System.in
@@ -42,6 +32,7 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
 }
 
 // Define the main class for the application
