@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package system_engineering.dao;
+package com.jatte.services.registry.dao;
 
-import system_engineering.model.RegisteredService;
-import system_engineering.model.ServiceRegistryInput;
+
+import com.jatte.services.registry.model.RegisteredService;
+import com.jatte.services.registry.model.Service;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,10 +22,10 @@ public class StubServiceRegistryDao implements ServiceRegistryDao {
     private Map<String, Set<String>> serviceRegistry = new HashMap<>();
 
     @Override
-    public boolean registerService(String serviceName, String ip) {
-        Set<String> ips = serviceRegistry.getOrDefault(serviceName, new HashSet<>());
-        serviceRegistry.putIfAbsent(serviceName, ips);
-        return ips.add(ip);
+    public boolean registerService(Service service) {
+        Set<String> ips = serviceRegistry.getOrDefault(service.getServiceName(), new HashSet<>());
+        serviceRegistry.putIfAbsent(service.getServiceName(), ips);
+        return ips.add(service.getIp());
     }
 
     @Override
@@ -45,12 +46,12 @@ public class StubServiceRegistryDao implements ServiceRegistryDao {
     }
 
     @Override
-    public boolean registerService(List<ServiceRegistryInput> registryInputs) {
+    public boolean registerService(List<Service> registryInputs) {
         return false;
     }
 
     @Override
-    public boolean deRregisterService(List<ServiceRegistryInput> registryInputs) {
+    public boolean deRregisterService(List<String> registryInputs) {
         return false;
     }
 }

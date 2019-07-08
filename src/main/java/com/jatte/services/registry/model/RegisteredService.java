@@ -1,8 +1,9 @@
-package system_engineering.model;
+package com.jatte.services.registry.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class RegisteredService {
+public class RegisteredService implements Serializable {
     private String serviceName;
     private String ip;
     private LocalDate uptime;

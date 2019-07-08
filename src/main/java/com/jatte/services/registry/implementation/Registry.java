@@ -3,19 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package system_engineering;
+package com.jatte.services.registry.implementation;
 
-import system_engineering.model.RegisteredService;
 
-import java.net.URL;
-import java.util.Set;
+import com.jatte.services.registry.model.RegisteredService;
+import com.jatte.services.registry.model.Service;
+
+import javax.ws.rs.Path;
+
 
 /**
  *
  * @author jovaughnlockridge1
  */
 public interface Registry {
-    void register(String serviceName, String ip, URL healthcheck);
+    void register(Service service);
     void deregister(String serviceName);
     RegisteredService query(String serviceName);
 }
