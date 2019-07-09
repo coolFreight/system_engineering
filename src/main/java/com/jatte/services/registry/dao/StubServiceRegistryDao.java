@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author jovaughnlockridge1
+ * @author jovaughn lockridge
  */
 public class StubServiceRegistryDao implements ServiceRegistryDao {
     private Map<String, Set<String>> serviceRegistry = new HashMap<>();

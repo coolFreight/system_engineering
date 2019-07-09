@@ -14,7 +14,7 @@ import javax.ws.rs.Path;
 
 /**
  *
- * @author jovaughnlockridge1
+ * @author jovaughn lockridge
  */
 public interface Registry {
     void register(Service service);

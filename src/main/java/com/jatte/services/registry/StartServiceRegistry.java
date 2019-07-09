@@ -15,7 +15,7 @@ import java.net.URI;
 public class StartServiceRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StartServiceRegistry.class);
-    public static final String BASE_URI = "http://localhost:8001/system_engineering/";
+    public static final String BASE_URI = "http://192.168.1.152:8001/system_engineering/";
 
     public static HttpServer startServer() {
         ObjectMapper mapper = new ObjectMapper();
@@ -34,6 +34,6 @@ public class StartServiceRegistry {
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
-        server.stop();
+        server.shutdownNow();
     }
 }

@@ -30,7 +30,6 @@ public class MySqlServiceRegistryDao implements ServiceRegistryDao {
             System.err.println("There was an error getting a connection to db " + sqle.getMessage());
             sqle.printStackTrace();
             throw new RuntimeException("Could not connect to DB");
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
