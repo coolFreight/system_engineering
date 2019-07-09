@@ -27,7 +27,7 @@ public class ServiceRegistryTester {
             server.shutdownNow();
         }else {
             Scanner sc = new Scanner(System.in);
-            ServiceRegistry sr = new ServiceRegistry(new MySqlServiceRegistryDao());
+            ServiceRegistry sr = new ServiceRegistry(new MySqlServiceRegistryDaoImpl());
             do {
                 printMenu();
                 int command = sc.nextInt();

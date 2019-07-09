@@ -9,8 +9,8 @@ import java.sql.*;
 import java.util.List;
 import java.util.Properties;
 
-public class MySqlServiceRegistryDao implements ServiceRegistryDao {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MySqlServiceRegistryDao.class);
+public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MySqlServiceRegistryDaoImpl.class);
 
     private Connection conn;
     private PreparedStatement queryRegisteredService = null;
@@ -19,7 +19,7 @@ public class MySqlServiceRegistryDao implements ServiceRegistryDao {
     private String removeServiceSql = "delete from " + DB_NAME + ".service_registry where service = ?";
     private String getServiceNameSql = "select * from " + DB_NAME + ".service_registry where service = ?";
 
-    public MySqlServiceRegistryDao() {
+    public MySqlServiceRegistryDaoImpl() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Properties properties = new Properties();

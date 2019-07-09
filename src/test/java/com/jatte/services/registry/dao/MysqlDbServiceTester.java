@@ -14,7 +14,7 @@ public class MysqlDbServiceTester {
 
     @Before
     public void setup() {
-        mysqlServiceRegistyDao =  new MySqlServiceRegistryDao();
+        mysqlServiceRegistyDao =  new MySqlServiceRegistryDaoImpl();
     }
 
     @Test

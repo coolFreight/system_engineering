@@ -2,7 +2,7 @@ package com.jatte.services.registry.implementation;
 
 import java.sql.SQLException;
 
-import com.jatte.services.registry.dao.MySqlServiceRegistryDao;
+import com.jatte.services.registry.dao.MySqlServiceRegistryDaoImpl;
 import com.jatte.services.registry.dao.ServiceRegistryDao;
 import com.jatte.services.registry.model.RegisteredService;
 import com.jatte.services.registry.model.Service;
@@ -33,7 +33,7 @@ public class ServiceRegistry implements Registry {
      *
      */
     public ServiceRegistry(){
-        this.dao = new MySqlServiceRegistryDao();
+        this.dao = new MySqlServiceRegistryDaoImpl();
     }
 
     /**
