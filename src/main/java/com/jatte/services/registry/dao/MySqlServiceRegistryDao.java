@@ -24,7 +24,7 @@ public class MySqlServiceRegistryDao implements ServiceRegistryDao {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Properties properties = new Properties();
             properties.put("user", "serialcoderer");
-            properties.put("password", "");
+            properties.put("password", "rainbow14");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", properties);
         } catch (SQLException sqle) {
             System.err.println("There was an error getting a connection to db " + sqle.getMessage());
