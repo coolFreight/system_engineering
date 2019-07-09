@@ -2,6 +2,7 @@ package com.jatte.services.registry.dao;
 
 import com.jatte.services.registry.model.RegisteredService;
 import com.jatte.services.registry.model.Service;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,26 +19,21 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     private String insertServiceSql = "insert into " + DB_NAME + ".service_registry (service, ip) values (?,?)";
     private String removeServiceSql = "delete from " + DB_NAME + ".service_registry where service = ?";
     private String getServiceNameSql = "select * from " + DB_NAME + ".service_registry where service = ?";
+    private static BasicDataSource ds = new BasicDataSource();
 
-    public MySqlServiceRegistryDaoImpl() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Properties properties = new Properties();
-            properties.put("user", "serialcoderer");
-            properties.put("password", "rainbow14");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", properties);
-        } catch (SQLException sqle) {
-            System.err.println("There was an error getting a connection to db " + sqle.getMessage());
-            sqle.printStackTrace();
-            throw new RuntimeException("Could not connect to DB");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    static {
+        ds.setUrl("jdbc:mysql://localhost:3306/");
+        ds.setUsername("serialcoderer");
+        ds.setPassword("");
+        ds.setMinIdle(5);
+        ds.setMaxIdle(10);
+        ds.setMaxOpenPreparedStatements(100);
     }
 
     @Override
     public boolean registerService(Service service) {
         try {
+            conn = ds.getConnection();
             conn.setAutoCommit(false);
             queryRegisteredService = conn.prepareStatement(insertServiceSql);
             queryRegisteredService.setString(1, service.getServiceName());
@@ -63,13 +59,14 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
         boolean successfulTransaction = false;
         try {
             for (Service registryInput : registryInputs) {
+                conn = ds.getConnection();
                 conn.setAutoCommit(false);
                 queryRegisteredService = conn.prepareStatement(insertServiceSql);
                 queryRegisteredService.setString(1, registryInput.getServiceName());
                 queryRegisteredService.setString(2, registryInput.getIp());
                 queryRegisteredService.executeUpdate();
+                conn.commit();
             }
-            conn.commit();
             return true;
         } catch (SQLException sqle) {
             LOGGER.error("There was an error inserting service into table ", sqle);
@@ -90,6 +87,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     public boolean deregisterService(String serviceName) throws SQLException {
         boolean successfulTransaction = false;
         try {
+            conn = ds.getConnection();
             conn.setAutoCommit(false);
             queryRegisteredService = conn.prepareStatement(removeServiceSql);
             queryRegisteredService.setString(1, serviceName);
@@ -110,6 +108,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     public RegisteredService queryServiceIp(String serviceName) {
         RegisteredService registeredService = null;
         try {
+            conn = ds.getConnection();
             queryRegisteredService = conn.prepareStatement(getServiceNameSql);
             queryRegisteredService.setString(1, serviceName);
             ResultSet result = queryRegisteredService.executeQuery();
