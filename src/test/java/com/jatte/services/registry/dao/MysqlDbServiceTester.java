@@ -1,27 +1,25 @@
 package com.jatte.services.registry.dao;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import com.jatte.services.registry.model.RegisteredService;
 import com.jatte.services.registry.model.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+
 public class MysqlDbServiceTester {
     private ServiceRegistryDao mysqlServiceRegistyDao;
 
     @Before
-    public void setup() {
-        mysqlServiceRegistyDao =  new MySqlServiceRegistryDaoImpl();
+    public void setup() throws SQLException {
+        mysqlServiceRegistyDao = new MySqlServiceRegistryDaoImpl();
     }
 
     @Test
     public void testRollback() throws SQLException {
-        List<Service> services = List.of(new Service("order-service-1", "localhost"),
-                new Service("payment-service", "localhost"),
-                new Service("order-service-1", "localhost"));
+        List<Service> services = List.of(new Service("order-service-1", "localhost", "healthCheck"),
+                new Service("payment-service", "localhost", "healthCheck"),
+                new Service("order-service-1", "localhost", "healthCheck"));
         Assert.assertFalse(mysqlServiceRegistyDao.registerService(services));
         RegisteredService registeredService = mysqlServiceRegistyDao.queryServiceIp("order-service-1");
         Assert.assertNull(registeredService);
@@ -29,9 +27,9 @@ public class MysqlDbServiceTester {
 
     @Test
     public void testPersistence() throws SQLException {
-        List<Service> services = List.of(new Service("order-service-1", "localhost"),
-                new Service("payment-service", "localhost"),
-                new Service("order-service-2", "localhost"));
+        List<Service> services = List.of(new Service("order-service-1", "localhost", "healthCheck"),
+                new Service("payment-service", "localhost", "healthCheck"),
+                new Service("order-service-2", "localhost", "healthCheck"));
         mysqlServiceRegistyDao.registerService(services);
         RegisteredService registeredService = mysqlServiceRegistyDao.queryServiceIp("order-service-2");
         Assert.assertEquals("order-service-2", registeredService.getServiceName());
@@ -41,9 +39,8 @@ public class MysqlDbServiceTester {
 
     @After
     public void cleanUpDB() throws SQLException {
-        mysqlServiceRegistyDao.deregisterService("order-service-1");
-        mysqlServiceRegistyDao.deregisterService("payment-service");
-        mysqlServiceRegistyDao.deregisterService("order-service-2");
+        mysqlServiceRegistyDao.removeService("order-service-1");
+        mysqlServiceRegistyDao.removeService("payment-service");
+        mysqlServiceRegistyDao.removeService("order-service-2");
     }
-
 }

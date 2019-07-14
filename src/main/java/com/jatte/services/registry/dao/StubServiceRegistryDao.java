@@ -9,6 +9,7 @@ package com.jatte.services.registry.dao;
 import com.jatte.services.registry.model.RegisteredService;
 import com.jatte.services.registry.model.Service;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,5 +59,10 @@ public class StubServiceRegistryDao implements ServiceRegistryDao {
     @Override
     public List<RegisteredService> getRegisteredServices() {
         return null;
+    }
+
+    @Override
+    public boolean removeService(String service) throws SQLException {
+        return false;
     }
 }

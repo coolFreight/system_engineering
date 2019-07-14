@@ -21,16 +21,18 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     private PreparedStatement preparedStatement = null;
     private static final String DB_NAME = "system_engineering";
     private String insertServiceSql = "insert into " + DB_NAME + ".service_registry (service, url, health_check_url) values (?,?,?)";
-    private String removeServiceSql = "update " + DB_NAME + ".service_registry SET connected = 'f' where service= ?";
+    private String deregisterService = "update " + DB_NAME + ".service_registry SET connected = 'f' where service= ?";
     private String getServiceNameSql = "select * from " + DB_NAME + ".service_registry where service = ?";
     private String allConnectedServicesSql = "select * from " + DB_NAME + ".service_registry where connected = 't'";
+    private String removeServiceSql = "delete from " + DB_NAME + ".service_registry where service = ?";
+
 
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
         ds.setUrl("jdbc:mysql://localhost:3306/");
-        ds.setUsername("");
-        ds.setPassword("");
+        ds.setUsername("root");
+        ds.setPassword("rainbow14");
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
@@ -68,22 +70,25 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     public boolean registerService(List<Service> registryInputs) throws SQLException {
         boolean successfulTransaction = false;
         try {
+            conn = ds.getConnection();
             for (Service registryInput : registryInputs) {
-                conn = ds.getConnection();
                 conn.setAutoCommit(false);
                 preparedStatement = conn.prepareStatement(insertServiceSql);
                 preparedStatement.setString(1, registryInput.getServiceName());
                 preparedStatement.setString(2, registryInput.getUrl());
+                preparedStatement.setString(3, registryInput.getHealthCheckUrl());
                 preparedStatement.executeUpdate();
-                conn.commit();
             }
+            conn.commit();
             return true;
         } catch (SQLException sqle) {
             LOGGER.error("There was an error inserting service into table ", sqle);
-        }
-        if (!successfulTransaction) {
-            LOGGER.warn("Transaction was rolled back");
-            conn.rollback();
+        } finally {
+            if (!successfulTransaction) {
+                LOGGER.warn("Transaction was rolled back");
+                conn.rollback();
+            }
+            conn.close();
         }
         return successfulTransaction;
     }
@@ -95,19 +100,20 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
 
     @Override
     public boolean deregisterService(String serviceName) throws SQLException {
+        LOGGER.info("Evicting service={} ", serviceName);
         boolean successfulTransaction = false;
         try {
             conn = ds.getConnection();
             conn.setAutoCommit(false);
-            preparedStatement = conn.prepareStatement(removeServiceSql);
+            preparedStatement = conn.prepareStatement(deregisterService);
             preparedStatement.setString(1, serviceName);
             preparedStatement.executeUpdate();
             conn.commit();
             successfulTransaction = true;
+            LOGGER.info("Evicted service={} ", serviceName);
         } catch (SQLException sqle) {
             LOGGER.error("There was an error de-registering service {}  from table {} ", serviceName, DB_NAME, sqle);
-            sqle.printStackTrace();
-        }finally {
+        } finally {
             if (!successfulTransaction) {
                 conn.rollback();
             }
@@ -131,6 +137,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
                 registeredService.setHealthCheckUrl(result.getString(HEALTH_CHECK_URL_COLUMN));
                 result.close();
             }
+            conn.close();
             LOGGER.info("Retrieved registered service [ {} ]", registeredService);
         } catch (SQLException sqle) {
             LOGGER.error("There was an error querying service into table ", sqle);
@@ -158,5 +165,28 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             LOGGER.error("There was an error querying service into table ", sqle);
         }
         return registeredServices;
+    }
+
+    @Override
+    public boolean removeService(String service) throws SQLException {
+        boolean successfulTransaction = false;
+        try {
+            conn = ds.getConnection();
+            conn.setAutoCommit(false);
+            preparedStatement = conn.prepareStatement(removeServiceSql);
+            preparedStatement.setString(1, service);
+            preparedStatement.executeUpdate();
+            conn.commit();
+            successfulTransaction = true;
+        } catch (SQLException sqle) {
+            LOGGER.error("There was an error de-registering service {}  from table {} ", service, DB_NAME, sqle);
+            sqle.printStackTrace();
+        } finally {
+            if (!successfulTransaction) {
+                conn.rollback();
+            }
+            conn.close();
+            return successfulTransaction;
+        }
     }
 }

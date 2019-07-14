@@ -22,4 +22,6 @@ public interface ServiceRegistryDao {
     boolean deRregisterService(List<String> registryInputs);
 
     List<RegisteredService> getRegisteredServices();
+
+    boolean removeService(String service) throws SQLException;
 }

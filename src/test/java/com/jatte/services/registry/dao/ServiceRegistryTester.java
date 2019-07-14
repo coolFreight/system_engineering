@@ -37,7 +37,7 @@ public class ServiceRegistryTester {
                         String serviceName = sc.next();
                         System.out.println("Enter service ip");
                         String ip = sc.next();
-                        Service service = new Service(serviceName, ip);
+                        Service service = new Service(serviceName, ip, "");
                         sr.register(service);
                         break;
                     case 2:
