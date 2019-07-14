@@ -1,6 +1,7 @@
 package com.jatte.services.registry.implementation;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import com.jatte.services.registry.dao.MySqlServiceRegistryDaoImpl;
 import com.jatte.services.registry.dao.ServiceRegistryDao;
@@ -38,7 +39,7 @@ public class ServiceRegistry implements Registry {
 
     /**
      *
-     * health check URL is used to determine if a service is still responsive, if not the service will be deregistered
+     * health check URL_COLUMN is used to determine if a service is still responsive, if not the service will be deregistered
      *
      */
     @POST
@@ -47,6 +48,7 @@ public class ServiceRegistry implements Registry {
     @Override
     public void register(Service service) {
         dao.registerService(service);
+        LOGGER.info("Registered service {}", service);
     }
 
     @Override
@@ -65,6 +67,15 @@ public class ServiceRegistry implements Registry {
     @Override
     public RegisteredService query(@PathParam("serviceName") String serviceName) {
         return dao.queryServiceIp(serviceName);
+    }
+
+    @GET
+    @Path("service_registry/ping")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Override
+    public String ping() {
+        LOGGER.info("ping endpoint was hit at {} ", LocalDateTime.now());
+        return "PONG";
     }
 
 }

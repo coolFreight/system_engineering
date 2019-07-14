@@ -35,7 +35,7 @@ public class MysqlDbServiceTester {
         mysqlServiceRegistyDao.registerService(services);
         RegisteredService registeredService = mysqlServiceRegistyDao.queryServiceIp("order-service-2");
         Assert.assertEquals("order-service-2", registeredService.getServiceName());
-        Assert.assertEquals("localhost", registeredService.getIp());
+        Assert.assertEquals("localhost", registeredService.getUrl());
         Assert.assertEquals(null, registeredService.getUptime());
     }
 

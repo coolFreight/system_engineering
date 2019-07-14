@@ -7,23 +7,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(MySqlServiceRegistryDaoImpl.class);
+    private static final String HEALTH_CHECK_URL_COLUMN = "health_check_url";
+    private static final String RUNNING_SINCE_COLUMN = "running_since";
+    private static final String URL_COLUMN = "url";
+    private static final String SERVICE_COLUMN = "service";
 
     private Connection conn;
-    private PreparedStatement queryRegisteredService = null;
+    private PreparedStatement preparedStatement = null;
     private static final String DB_NAME = "system_engineering";
-    private String insertServiceSql = "insert into " + DB_NAME + ".service_registry (service, ip) values (?,?)";
-    private String removeServiceSql = "delete from " + DB_NAME + ".service_registry where service = ?";
+    private String insertServiceSql = "insert into " + DB_NAME + ".service_registry (service, url, health_check_url) values (?,?,?)";
+    private String removeServiceSql = "update " + DB_NAME + ".service_registry SET connected = 'f' where service= ?";
     private String getServiceNameSql = "select * from " + DB_NAME + ".service_registry where service = ?";
+    private String allConnectedServicesSql = "select * from " + DB_NAME + ".service_registry where connected = 't'";
+
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
         ds.setUrl("jdbc:mysql://localhost:3306/");
-        ds.setUsername("serialcoderer");
+        ds.setUsername("");
         ds.setPassword("");
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
@@ -32,20 +38,24 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
 
     @Override
     public boolean registerService(Service service) {
+        LOGGER.info("Persisting service {} ", service.getServiceName());
         try {
             conn = ds.getConnection();
             conn.setAutoCommit(false);
-            queryRegisteredService = conn.prepareStatement(insertServiceSql);
-            queryRegisteredService.setString(1, service.getServiceName());
-            queryRegisteredService.setString(2, service.getIp());
-            queryRegisteredService.executeUpdate();
+            preparedStatement = conn.prepareStatement(insertServiceSql);
+            preparedStatement.setString(1, service.getServiceName());
+            preparedStatement.setString(2, service.getUrl());
+            preparedStatement.setString(3, service.getHealthCheckUrl());
+            preparedStatement.executeUpdate();
             conn.commit();
+            conn.close();
+            LOGGER.info("Persisted service {} ", service.getServiceName());
             return true;
         } catch (SQLException sqle) {
-            System.err.println("There was an error inserting service into table " + sqle.getMessage());
+            LOGGER.error("Could not register service {} ", service, sqle);
             sqle.printStackTrace();
             try {
-                LOGGER.warn("Transaction was rollback");
+                LOGGER.warn("Transaction was rolled back");
                 conn.rollback();
             } catch (SQLException e) {
                 LOGGER.error("There was an error inserting service into table ", sqle);
@@ -61,10 +71,10 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             for (Service registryInput : registryInputs) {
                 conn = ds.getConnection();
                 conn.setAutoCommit(false);
-                queryRegisteredService = conn.prepareStatement(insertServiceSql);
-                queryRegisteredService.setString(1, registryInput.getServiceName());
-                queryRegisteredService.setString(2, registryInput.getIp());
-                queryRegisteredService.executeUpdate();
+                preparedStatement = conn.prepareStatement(insertServiceSql);
+                preparedStatement.setString(1, registryInput.getServiceName());
+                preparedStatement.setString(2, registryInput.getUrl());
+                preparedStatement.executeUpdate();
                 conn.commit();
             }
             return true;
@@ -89,17 +99,19 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
         try {
             conn = ds.getConnection();
             conn.setAutoCommit(false);
-            queryRegisteredService = conn.prepareStatement(removeServiceSql);
-            queryRegisteredService.setString(1, serviceName);
-            queryRegisteredService.executeUpdate();
+            preparedStatement = conn.prepareStatement(removeServiceSql);
+            preparedStatement.setString(1, serviceName);
+            preparedStatement.executeUpdate();
             conn.commit();
             successfulTransaction = true;
         } catch (SQLException sqle) {
             LOGGER.error("There was an error de-registering service {}  from table {} ", serviceName, DB_NAME, sqle);
             sqle.printStackTrace();
-        }
-        if (!successfulTransaction) {
-            conn.rollback();
+        }finally {
+            if (!successfulTransaction) {
+                conn.rollback();
+            }
+            conn.close();
         }
         return successfulTransaction;
     }
@@ -109,13 +121,14 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
         RegisteredService registeredService = null;
         try {
             conn = ds.getConnection();
-            queryRegisteredService = conn.prepareStatement(getServiceNameSql);
-            queryRegisteredService.setString(1, serviceName);
-            ResultSet result = queryRegisteredService.executeQuery();
+            preparedStatement = conn.prepareStatement(getServiceNameSql);
+            preparedStatement.setString(1, serviceName);
+            ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
                 registeredService = new RegisteredService();
-                registeredService.setServiceName(result.getString("service"));
-                registeredService.setIp(result.getString("ip"));
+                registeredService.setServiceName(result.getString(SERVICE_COLUMN));
+                registeredService.setUrl(result.getString(URL_COLUMN));
+                registeredService.setHealthCheckUrl(result.getString(HEALTH_CHECK_URL_COLUMN));
                 result.close();
             }
             LOGGER.info("Retrieved registered service [ {} ]", registeredService);
@@ -123,5 +136,27 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             LOGGER.error("There was an error querying service into table ", sqle);
         }
         return registeredService;
+    }
+
+    public List<RegisteredService> getRegisteredServices() {
+        List<RegisteredService> registeredServices = new ArrayList<>();
+        try {
+            conn = ds.getConnection();
+            preparedStatement = conn.prepareStatement(allConnectedServicesSql);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                RegisteredService registeredService = new RegisteredService();
+                registeredService.setServiceName(result.getString(SERVICE_COLUMN));
+                registeredService.setUrl(result.getString(URL_COLUMN));
+                registeredService.setUptime(result.getTimestamp(RUNNING_SINCE_COLUMN));
+                registeredService.setHealthCheckUrl(result.getString(HEALTH_CHECK_URL_COLUMN));
+                registeredServices.add(registeredService);
+                LOGGER.info("Retrieved registered service [ {} ]", registeredService);
+            }
+            result.close();
+        } catch (SQLException sqle) {
+            LOGGER.error("There was an error querying service into table ", sqle);
+        }
+        return registeredServices;
     }
 }

@@ -1,12 +1,14 @@
 package com.jatte.services.registry.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 public class RegisteredService implements Serializable {
     private String serviceName;
-    private String ip;
-    private LocalDate uptime;
+    private String url;
+    private Timestamp uptime;
+    private String healthCheckUrl;
+
 
     public String getServiceName() {
         return serviceName;
@@ -16,27 +18,35 @@ public class RegisteredService implements Serializable {
         this.serviceName = serviceName;
     }
 
-    public String getIp() {
-        return ip;
+    public String getUrl() {
+        return url;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public LocalDate getUptime() {
+    public Timestamp getUptime() {
         return uptime;
     }
 
-    public void setUptime(LocalDate uptime) {
+    public void setUptime(Timestamp uptime) {
         this.uptime = uptime;
+    }
+
+    public void setHealthCheckUrl(String healthCheckUrl) {
+        this.healthCheckUrl = healthCheckUrl;
+    }
+
+    public String getHealthCheckUrl() {
+        return healthCheckUrl;
     }
 
     @Override
     public String toString() {
         return "RegisteredService{" +
                 "serviceName='" + serviceName + '\'' +
-                ", ip='" + ip + '\'' +
+                ", url='" + url + '\'' +
                 ", uptime=" + uptime +
                 '}';
     }

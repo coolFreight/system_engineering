@@ -20,4 +20,6 @@ public interface ServiceRegistryDao {
     boolean registerService(List<Service> registryInputs) throws SQLException;
 
     boolean deRregisterService(List<String> registryInputs);
+
+    List<RegisteredService> getRegisteredServices();
 }

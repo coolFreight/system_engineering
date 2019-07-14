@@ -25,7 +25,7 @@ public class StubServiceRegistryDao implements ServiceRegistryDao {
     public boolean registerService(Service service) {
         Set<String> ips = serviceRegistry.getOrDefault(service.getServiceName(), new HashSet<>());
         serviceRegistry.putIfAbsent(service.getServiceName(), ips);
-        return ips.add(service.getIp());
+        return ips.add(service.getUrl());
     }
 
     @Override
@@ -53,5 +53,10 @@ public class StubServiceRegistryDao implements ServiceRegistryDao {
     @Override
     public boolean deRregisterService(List<String> registryInputs) {
         return false;
+    }
+
+    @Override
+    public List<RegisteredService> getRegisteredServices() {
+        return null;
     }
 }

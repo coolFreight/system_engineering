@@ -9,7 +9,6 @@ package com.jatte.services.registry.implementation;
 import com.jatte.services.registry.model.RegisteredService;
 import com.jatte.services.registry.model.Service;
 
-import javax.ws.rs.Path;
 
 
 /**
@@ -20,4 +19,5 @@ public interface Registry {
     void register(Service service);
     void deregister(String serviceName);
     RegisteredService query(String serviceName);
+    String ping();
 }
