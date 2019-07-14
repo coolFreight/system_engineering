@@ -1,8 +1,8 @@
-package com.jatte.services.registry.dao;
+package com.jatte.services.service_discovery.dao;
 
-import com.jatte.services.registry.implementation.ServiceRegistry;
-import com.jatte.services.registry.model.RegisteredService;
-import com.jatte.services.registry.model.Service;
+import com.jatte.services.service_discovery.implementation.ServiceRegistry;
+import com.jatte.services.service_discovery.model.RegisteredService;
+import com.jatte.services.service_discovery.model.Service;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static com.jatte.services.registry.StartServiceRegistry.BASE_URI;
-import static com.jatte.services.registry.StartServiceRegistry.startServer;
+import static com.jatte.services.service_discovery.StartServiceRegistry.BASE_URI;
+import static com.jatte.services.service_discovery.StartServiceRegistry.startServer;
 
 public class ServiceRegistryTester {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRegistryTester.class);

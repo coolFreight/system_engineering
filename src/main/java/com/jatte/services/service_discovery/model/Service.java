@@ -1,4 +1,4 @@
-package com.jatte.services.registry.model;
+package com.jatte.services.service_discovery.model;
 
 import java.io.Serializable;
 

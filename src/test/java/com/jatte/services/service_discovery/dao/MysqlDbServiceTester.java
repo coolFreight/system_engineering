@@ -1,8 +1,8 @@
-package com.jatte.services.registry.dao;
+package com.jatte.services.service_discovery.dao;
 
 import org.junit.*;
-import com.jatte.services.registry.model.RegisteredService;
-import com.jatte.services.registry.model.Service;
+import com.jatte.services.service_discovery.model.RegisteredService;
+import com.jatte.services.service_discovery.model.Service;
 
 import java.sql.SQLException;
 import java.util.List;

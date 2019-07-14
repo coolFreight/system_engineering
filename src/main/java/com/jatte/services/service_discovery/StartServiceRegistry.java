@@ -1,9 +1,9 @@
-package com.jatte.services.registry;
+package com.jatte.services.service_discovery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import com.jatte.services.registry.dao.MySqlServiceRegistryDaoImpl;
+import com.jatte.services.service_discovery.dao.MySqlServiceRegistryDaoImpl;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;

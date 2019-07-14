@@ -1,7 +1,7 @@
-package com.jatte.services.registry;
+package com.jatte.services.service_discovery;
 
-import com.jatte.services.registry.dao.ServiceRegistryDao;
-import com.jatte.services.registry.model.RegisteredService;
+import com.jatte.services.service_discovery.dao.ServiceRegistryDao;
+import com.jatte.services.service_discovery.model.RegisteredService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

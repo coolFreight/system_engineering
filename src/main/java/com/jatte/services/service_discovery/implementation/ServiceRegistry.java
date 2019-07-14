@@ -1,12 +1,12 @@
-package com.jatte.services.registry.implementation;
+package com.jatte.services.service_discovery.implementation;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import com.jatte.services.registry.dao.MySqlServiceRegistryDaoImpl;
-import com.jatte.services.registry.dao.ServiceRegistryDao;
-import com.jatte.services.registry.model.RegisteredService;
-import com.jatte.services.registry.model.Service;
+import com.jatte.services.service_discovery.dao.MySqlServiceRegistryDaoImpl;
+import com.jatte.services.service_discovery.dao.ServiceRegistryDao;
+import com.jatte.services.service_discovery.model.RegisteredService;
+import com.jatte.services.service_discovery.model.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

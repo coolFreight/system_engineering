@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jatte.services.registry.dao;
+package com.jatte.services.service_discovery.dao;
 
 
-import com.jatte.services.registry.model.RegisteredService;
-import com.jatte.services.registry.model.Service;
+import com.jatte.services.service_discovery.model.RegisteredService;
+import com.jatte.services.service_discovery.model.Service;
 
 import java.sql.SQLException;
 import java.util.HashMap;

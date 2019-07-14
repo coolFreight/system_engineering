@@ -1,7 +1,7 @@
-package com.jatte.services.registry.dao;
+package com.jatte.services.service_discovery.dao;
 
-import com.jatte.services.registry.model.RegisteredService;
-import com.jatte.services.registry.model.Service;
+import com.jatte.services.service_discovery.model.RegisteredService;
+import com.jatte.services.service_discovery.model.Service;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
