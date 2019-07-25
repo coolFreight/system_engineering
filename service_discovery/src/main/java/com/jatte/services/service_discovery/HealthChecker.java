@@ -69,6 +69,7 @@ public class HealthChecker {
                 }
             } catch (IOException e) {
                 LOGGER.error("Could not establish a connection to health check URL_COLUMN {} for service {} ", registeredServiceUrl, serviceName, e);
+                dbDao.deregisterService(serviceName);
             } finally {
                 return successfulConnection;
             }

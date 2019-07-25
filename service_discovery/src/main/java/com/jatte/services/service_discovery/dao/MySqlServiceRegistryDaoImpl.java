@@ -31,8 +31,8 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
 
     static {
         ds.setUrl("jdbc:mysql://localhost:3306/");
-        ds.setUsername("");
-        ds.setPassword("");
+        ds.setUsername("serialcoderer");
+        ds.setPassword("rainbow14");
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
@@ -188,5 +188,6 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             conn.close();
             return successfulTransaction;
         }
+
     }
 }
