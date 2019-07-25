@@ -8,3 +8,7 @@
  */
 
 rootProject.name = 'system_engineering'
+include 'service_discovery'
+include 'KafkaClient'
+include 'order_service'
+include 'inventory_service'
