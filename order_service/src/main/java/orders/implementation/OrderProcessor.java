@@ -27,25 +27,17 @@ public class OrderProcessor {
     public void startOrderProcessingService() {
         LOGGER.info("Polling for new orders created");
         ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor();
-        threadPool.scheduleAtFixedRate(() -> publishPendingOrders(), 1L, 45L, TimeUnit.SECONDS);
+        threadPool.scheduleAtFixedRate(() -> publishPendingOrders(), 1L, 5L, TimeUnit.SECONDS);
     }
 
     private void publishPendingOrders() {
         List<Integer> orderIds = orderServiceDao.getOutBoxUnpublishedOrders();
-        if(!orderIds.isEmpty()) {
+        if (!orderIds.isEmpty()) {
             List<Order> orders = orderServiceDao.getOrders(orderIds);
             for (Order order : orders) {
-                try {
-                    publisher.publishOrderEvent(order);
-                    orderServiceDao.updateOrderOutboxStatus(order.getOrderId());
-                    LOGGER.info("Order {} was published", order.getOrderId());
-                    LOGGER.info("Sleeping for one minute");
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                publisher.publishOrderEvent(order);
+                orderServiceDao.updateOrderOutboxStatus(order.getOrderId());
+                LOGGER.info("Order {} was published", order.getOrderId());
             }
         }
     }

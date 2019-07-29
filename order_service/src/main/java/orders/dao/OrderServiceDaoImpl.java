@@ -45,8 +45,7 @@ public class OrderServiceDaoImpl implements OrderServiceDao {
     public List<Integer> getOutBoxUnpublishedOrders() {
         LOGGER.info("Querying for unpublished outbox orders");
         List<Integer> orderIds = new ArrayList<>();
-        try {
-            Connection conn = ds.getConnection();
+        try (Connection conn = ds.getConnection()){
             preparedStatement = conn.prepareStatement(UNPUBLISHED_ORDER_IDS);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {

@@ -27,7 +27,7 @@ public class OrderServicePublisher {
         }
     }
 
-    public Future<RecordMetadata> publishOrderEvent(Order order) throws IOException {
+    public Future<RecordMetadata> publishOrderEvent(Order order) {
         LOGGER.info("Published order event of for order {} ", order.getOrderId());
         return p.send(new ProducerRecord<>(ORDERS_TOPIC, order.getOrderId()+"", order));
     }
