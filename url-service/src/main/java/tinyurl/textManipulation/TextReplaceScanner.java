@@ -1,4 +1,4 @@
-package textManipulation;
+package tinyurl.textManipulation;
 
 public interface TextReplaceScanner {
 

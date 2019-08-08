@@ -49,12 +49,12 @@ public class OrderStoreFront {
 //                    case 2:
 //                        break;
 //                    case 3:
-//                        System.out.println("Enter service name");
+//                        System.out.println("Enter tinyurl.service name");
 //                        String queriedService = sc.next();
 //                        break;
 //                }
 //            } while (!sc.nextLine().equals("quit"));
-            System.out.println("Shutting down service registry process");
+            System.out.println("Shutting down tinyurl.service registry process");
         }
     }
 }

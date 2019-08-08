@@ -39,7 +39,7 @@ public class ServiceRegistry implements Registry {
 
     /**
      *
-     * health check URL_COLUMN is used to determine if a service is still responsive, if not the service will be deregistered
+     * health check URL_COLUMN is used to determine if a tinyurl.service is still responsive, if not the tinyurl.service will be deregistered
      *
      */
     @POST
@@ -48,13 +48,13 @@ public class ServiceRegistry implements Registry {
     @Override
     public void register(Service service) {
         dao.registerService(service);
-        LOGGER.info("Registered service {}", service);
+        LOGGER.info("Registered tinyurl.service {}", service);
     }
 
     @Override
     public void deregister(String serviceName) {
         try {
-            LOGGER.info("Deregistering service {}", serviceName);
+            LOGGER.info("Deregistering tinyurl.service {}", serviceName);
             dao.deregisterService(serviceName);
         } catch (SQLException e) {
             e.printStackTrace();

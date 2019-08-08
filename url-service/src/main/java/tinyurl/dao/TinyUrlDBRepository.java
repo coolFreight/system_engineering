@@ -1,6 +1,6 @@
-package dao;
+package tinyurl.dao;
 
-import service.model.TinyUrlClickedMetaData;
+import tinyurl.service.model.TinyUrlClickedMetaData;
 
 import java.util.Optional;
 

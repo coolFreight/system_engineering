@@ -1,4 +1,4 @@
-package codec;
+package tinyurl.codec;
 
 
 public class SimpleTinyUrlCodec implements TinyUrlCodec<Long, String> {

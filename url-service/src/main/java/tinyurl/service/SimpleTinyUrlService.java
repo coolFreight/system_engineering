@@ -1,14 +1,19 @@
-package service;
+package tinyurl.service;
 
-import codec.TinyUrlCodec;
-import dao.UrlRepository;
+import tinyurl.codec.TinyUrlCodec;
+import tinyurl.dao.UrlRepository;
 import org.slf4j.Logger;
-import service.model.TinyUrlClickedMetaData;
+import tinyurl.service.model.TinyUrlClickedMetaData;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Path("/")
 public class SimpleTinyUrlService implements TinyUrlService {
     private static final Logger LOGGER = getLogger(SimpleTinyUrlService.class);
 
@@ -16,6 +21,8 @@ public class SimpleTinyUrlService implements TinyUrlService {
     private TinyUrlCodec<Long, String> urlEncoder;
     private UrlRepository urlRepository;
     private static final String TINY_URL_HOST = "https://sk.sh/";
+
+    public SimpleTinyUrlService (){}
 
     public SimpleTinyUrlService(UrlRepository urlRepository, TinyUrlCodec<Long, String> urlEncoder) {
         this.urlRepository = urlRepository;
@@ -30,15 +37,20 @@ public class SimpleTinyUrlService implements TinyUrlService {
         this.urlRepository = urlRepository;
     }
 
+
+    @POST
+    @Path("createTinyUrl")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Override
-    public String createTinyUrl(String longUrl) {
-        if (urlRepository.isLongUrlPersisted(longUrl)) {
-            LOGGER.warn("A tiny url was already created for url {} ", longUrl);
-            return urlRepository.getTinyUrl(longUrl).get();
+    public String createTinyUrl(CreateTinyUrl createTinyUrl) {
+        if (urlRepository.isLongUrlPersisted(createTinyUrl.getLongUrl())) {
+            LOGGER.warn("A tiny url was already created for url {} ", createTinyUrl);
+            return urlRepository.getTinyUrl(createTinyUrl.getLongUrl()).get();
         }
-        long urlId = urlRepository.persistLongUrl(longUrl);
+        long urlId = urlRepository.persistLongUrl(createTinyUrl.getLongUrl());
         String tinyUrl = urlEncoder.encode(urlId);
         urlRepository.persistTinyUrl(urlId, TINY_URL_HOST.concat(tinyUrl));
+        LOGGER.info("Created a tiny url={} for long url={}",createTinyUrl.getLongUrl(), tinyUrl);
         return tinyUrl;
     }
 

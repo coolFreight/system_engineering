@@ -1,4 +1,4 @@
-package codec;
+package tinyurl.codec;
 
 public interface TinyUrlCodec<T, R> {
     R encode(T val);

@@ -15,7 +15,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
     private static final String HEALTH_CHECK_URL_COLUMN = "health_check_url";
     private static final String RUNNING_SINCE_COLUMN = "running_since";
     private static final String URL_COLUMN = "url";
-    private static final String SERVICE_COLUMN = "service";
+    private static final String SERVICE_COLUMN = "tinyurl.service";
 
     private Connection conn;
     private PreparedStatement preparedStatement = null;
@@ -40,7 +40,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
 
     @Override
     public boolean registerService(Service service) {
-        LOGGER.info("Persisting service {} ", service.getServiceName());
+        LOGGER.info("Persisting tinyurl.service {} ", service.getServiceName());
         try {
             conn = ds.getConnection();
             conn.setAutoCommit(false);
@@ -51,16 +51,16 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             preparedStatement.executeUpdate();
             conn.commit();
             conn.close();
-            LOGGER.info("Persisted service {} ", service.getServiceName());
+            LOGGER.info("Persisted tinyurl.service {} ", service.getServiceName());
             return true;
         } catch (SQLException sqle) {
-            LOGGER.error("Could not register service {} ", service, sqle);
+            LOGGER.error("Could not register tinyurl.service {} ", service, sqle);
             sqle.printStackTrace();
             try {
                 LOGGER.warn("Transaction was rolled back");
                 conn.rollback();
             } catch (SQLException e) {
-                LOGGER.error("There was an error inserting service into table ", sqle);
+                LOGGER.error("There was an error inserting tinyurl.service into table ", sqle);
             }
         }
         return false;
@@ -82,7 +82,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             conn.commit();
             return true;
         } catch (SQLException sqle) {
-            LOGGER.error("There was an error inserting service into table ", sqle);
+            LOGGER.error("There was an error inserting tinyurl.service into table ", sqle);
         } finally {
             if (!successfulTransaction) {
                 LOGGER.warn("Transaction was rolled back");
@@ -100,7 +100,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
 
     @Override
     public boolean deregisterService(String serviceName) throws SQLException {
-        LOGGER.info("Evicting service={} ", serviceName);
+        LOGGER.info("Evicting tinyurl.service={} ", serviceName);
         boolean successfulTransaction = false;
         try {
             conn = ds.getConnection();
@@ -110,9 +110,9 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             preparedStatement.executeUpdate();
             conn.commit();
             successfulTransaction = true;
-            LOGGER.info("Evicted service={} ", serviceName);
+            LOGGER.info("Evicted tinyurl.service={} ", serviceName);
         } catch (SQLException sqle) {
-            LOGGER.error("There was an error de-registering service {}  from table {} ", serviceName, DB_NAME, sqle);
+            LOGGER.error("There was an error de-registering tinyurl.service {}  from table {} ", serviceName, DB_NAME, sqle);
         } finally {
             if (!successfulTransaction) {
                 conn.rollback();
@@ -138,9 +138,9 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
                 result.close();
             }
             conn.close();
-            LOGGER.info("Retrieved registered service [ {} ]", registeredService);
+            LOGGER.info("Retrieved registered tinyurl.service [ {} ]", registeredService);
         } catch (SQLException sqle) {
-            LOGGER.error("There was an error querying service into table ", sqle);
+            LOGGER.error("There was an error querying tinyurl.service into table ", sqle);
         }
         return registeredService;
     }
@@ -158,11 +158,11 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
                 registeredService.setUptime(result.getTimestamp(RUNNING_SINCE_COLUMN));
                 registeredService.setHealthCheckUrl(result.getString(HEALTH_CHECK_URL_COLUMN));
                 registeredServices.add(registeredService);
-                LOGGER.info("Retrieved registered service [ {} ]", registeredService);
+                LOGGER.info("Retrieved registered tinyurl.service [ {} ]", registeredService);
             }
             result.close();
         } catch (SQLException sqle) {
-            LOGGER.error("There was an error querying service into table ", sqle);
+            LOGGER.error("There was an error querying tinyurl.service into table ", sqle);
         }
         return registeredServices;
     }
@@ -179,7 +179,7 @@ public class MySqlServiceRegistryDaoImpl implements ServiceRegistryDao {
             conn.commit();
             successfulTransaction = true;
         } catch (SQLException sqle) {
-            LOGGER.error("There was an error de-registering service {}  from table {} ", service, DB_NAME, sqle);
+            LOGGER.error("There was an error de-registering tinyurl.service {}  from table {} ", service, DB_NAME, sqle);
             sqle.printStackTrace();
         } finally {
             if (!successfulTransaction) {

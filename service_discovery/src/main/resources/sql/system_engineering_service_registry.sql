@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `service_registry`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `service_registry` (
-  `service` varchar(100) NOT NULL,
+  `tinyurl.service` varchar(100) NOT NULL,
   `url` varchar(250) DEFAULT NULL,
   `running_since` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `health_check_url` varchar(250) DEFAULT NULL,
   `deregistered` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `connected` varchar(1) DEFAULT 't',
-  PRIMARY KEY (`service`)
+  PRIMARY KEY (`tinyurl.service`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -51,24 +51,24 @@ public class HealthChecker {
             String registeredServiceUrl = registeredService.getHealthCheckUrl() != null ? registeredService.getHealthCheckUrl().trim() : "";
             String serviceName = registeredService.getServiceName();
             try {
-                LOGGER.info("Pinging health url={} for service={}", registeredServiceUrl, serviceName);
+                LOGGER.info("Pinging health url={} for tinyurl.service={}", registeredServiceUrl, serviceName);
                 healthCheck = new URL(registeredServiceUrl);
                 httpURLConnection = (HttpURLConnection) healthCheck.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.connect();
                 successfulConnection = true;
-                LOGGER.error("Pinged service {} response code {} ", serviceName, httpURLConnection.getResponseCode());
+                LOGGER.error("Pinged tinyurl.service {} response code {} ", serviceName, httpURLConnection.getResponseCode());
             } catch (IOException e) {
-                LOGGER.error("Could not establish a connection to health check URL_COLUMN {} for service {} ", registeredServiceUrl, serviceName, e);
+                LOGGER.error("Could not establish a connection to health check URL_COLUMN {} for tinyurl.service {} ", registeredServiceUrl, serviceName, e);
             }
             try {
                 Optional<HttpURLConnection> optionalReponseCode = Optional.ofNullable(httpURLConnection);
                 if (!successfulConnection || httpURLConnection.getResponseCode() != 200) {
-                    LOGGER.error("Evicting service {} response code {} ", serviceName, optionalReponseCode.isPresent() ? optionalReponseCode.get().getResponseCode() : -1);
+                    LOGGER.error("Evicting tinyurl.service {} response code {} ", serviceName, optionalReponseCode.isPresent() ? optionalReponseCode.get().getResponseCode() : -1);
                     dbDao.deregisterService(serviceName);
                 }
             } catch (IOException e) {
-                LOGGER.error("Could not establish a connection to health check URL_COLUMN {} for service {} ", registeredServiceUrl, serviceName, e);
+                LOGGER.error("Could not establish a connection to health check URL_COLUMN {} for tinyurl.service {} ", registeredServiceUrl, serviceName, e);
                 dbDao.deregisterService(serviceName);
             } finally {
                 return successfulConnection;

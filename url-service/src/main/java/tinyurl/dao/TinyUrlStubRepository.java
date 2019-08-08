@@ -1,8 +1,8 @@
-package dao;
+package tinyurl.dao;
 
 import org.slf4j.Logger;
-import service.SimpleTinyUrlService;
-import service.model.TinyUrlClickedMetaData;
+import tinyurl.service.SimpleTinyUrlService;
+import tinyurl.service.model.TinyUrlClickedMetaData;
 
 import java.util.Map;
 import java.util.Optional;

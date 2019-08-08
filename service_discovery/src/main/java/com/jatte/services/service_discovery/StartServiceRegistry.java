@@ -34,7 +34,7 @@ public class StartServiceRegistry {
     }
 
     public static void main(String[] args) throws IOException, SQLException {
-        LOGGER.info("Running Service Discovery Registry Rest service....");
+        LOGGER.info("Running Service Discovery Registry Rest tinyurl.service....");
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));

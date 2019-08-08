@@ -1,12 +1,12 @@
-package service;
+package tinyurl.service;
 
-import service.model.TinyUrlClickedMetaData;
+import tinyurl.service.model.TinyUrlClickedMetaData;
 
 import java.util.Optional;
 
 public interface TinyUrlService {
 
-    String createTinyUrl(String originalUrl);
+    String createTinyUrl(CreateTinyUrl createTinyUrl);
 
     Optional<String> getLongUrl(String tinyUrl);
 

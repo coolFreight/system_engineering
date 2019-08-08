@@ -1,4 +1,4 @@
-package service.model;
+package tinyurl.service.model;
 
 import java.util.HashMap;
 import java.util.Map;

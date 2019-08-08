@@ -1,7 +1,8 @@
-package textManipulation;
+package tinyurl.textManipulation;
 
 import org.slf4j.Logger;
-import service.TinyUrlService;
+import tinyurl.service.CreateTinyUrl;
+import tinyurl.service.TinyUrlService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,11 @@ public class TinyURLTextReplaceScanner implements TextReplaceScanner{
             Matcher m = p.matcher(trimmedText);
             Matcher matchesTinyUrlPattern = patternOfTinyUrl.matcher(trimmedText);
             if (m.matches() && !matchesTinyUrlPattern.matches()) {
-                return TINY_URL_HOST.concat(tinyUrlService.createTinyUrl(trimmedText));
+                CreateTinyUrl createTinyUrl = new CreateTinyUrl();
+                createTinyUrl.setLongUrl(trimmedText);
+                String tinyUrl = TINY_URL_HOST.concat(tinyUrlService.createTinyUrl(createTinyUrl));
+                createTinyUrl.setTinyUrl(tinyUrl);
+                return tinyUrl;
             }
         }
         return  word;
