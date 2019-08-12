@@ -1,15 +1,15 @@
-import tinyurl.codec.SimpleTinyUrlCodec;
-import tinyurl.codec.TinyUrlCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import tinyurl.dao.TinyUrlStubRepository;
-import tinyurl.dao.UrlRepository;
-import tinyurl.service.CreateTinyUrl;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
+import tinyurl.codec.SimpleTinyUrlCodec;
+import tinyurl.codec.TinyUrlCodec;
+import tinyurl.dao.TinyUrlDBRepository;
+import tinyurl.dao.UrlRepository;
+import tinyurl.service.CreateTinyUrl;
 import tinyurl.service.CreateURLConsumer;
 import tinyurl.service.SimpleTinyUrlService;
 import tinyurl.service.TinyUrlService;
@@ -17,13 +17,12 @@ import tinyurl.service.model.TinyUrlClickedMetaData;
 import tinyurl.textManipulation.TextReplaceScanner;
 import tinyurl.textManipulation.TinyURLTextReplaceScanner;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static org.slf4j.LoggerFactory.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 
 public class LinkShortenerClient {
@@ -44,9 +43,9 @@ public class LinkShortenerClient {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         TinyUrlCodec<Long, String> urlEncoder = new SimpleTinyUrlCodec();
-        UrlRepository urlRepository = new TinyUrlStubRepository();
+        UrlRepository urlRepository = new TinyUrlDBRepository();
         TinyUrlService tinyUrlService = new SimpleTinyUrlService(urlRepository, urlEncoder);
         TextReplaceScanner tinyUrlTextReplaceScanner = new TinyURLTextReplaceScanner(tinyUrlService);
 
@@ -64,7 +63,7 @@ public class LinkShortenerClient {
             server.shutdownNow();
         }else {
             Scanner sc = new Scanner(System.in);
-            int command = 1;
+            int command = 3;
             do {
                 switch (command) {
                     case 1:
