@@ -14,17 +14,17 @@ import java.util.Optional;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Path("/")
-public class SimpleTinyUrlService implements TinyUrlService {
-    private static final Logger LOGGER = getLogger(SimpleTinyUrlService.class);
+public class SimpleTinyUrlResource {
+    private static final Logger LOGGER = getLogger(SimpleTinyUrlResource.class);
 
 
     private TinyUrlCodec<Long, String> urlEncoder;
     private UrlRepository urlRepository;
     private static final String TINY_URL_HOST = "https://sk.sh/";
 
-    public SimpleTinyUrlService (){}
+    public SimpleTinyUrlResource(){}
 
-    public SimpleTinyUrlService(UrlRepository urlRepository, TinyUrlCodec<Long, String> urlEncoder) {
+    public SimpleTinyUrlResource(UrlRepository urlRepository, TinyUrlCodec<Long, String> urlEncoder) {
         this.urlRepository = urlRepository;
         this.urlEncoder = urlEncoder;
     }
@@ -37,11 +37,9 @@ public class SimpleTinyUrlService implements TinyUrlService {
         this.urlRepository = urlRepository;
     }
 
-
     @POST
     @Path("createTinyUrl")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Override
     public String createTinyUrl(CreateTinyUrl createTinyUrl) {
         if (urlRepository.isLongUrlPersisted(createTinyUrl.getLongUrl())) {
             LOGGER.warn("A tiny url was already created for url {} ", createTinyUrl);
@@ -54,7 +52,6 @@ public class SimpleTinyUrlService implements TinyUrlService {
         return tinyUrl;
     }
 
-    @Override
     public Optional<String> getLongUrl(String tinyUrl) {
         long urlId = urlEncoder.decode(tinyUrl);
         Optional<String> longUrl = urlRepository.getLongUrl(urlId);
@@ -62,7 +59,6 @@ public class SimpleTinyUrlService implements TinyUrlService {
         return longUrl;
     }
 
-    @Override
     public boolean clickTinyUrl(String tinyUrl, TinyUrlClickedMetaData metaData) {
         LOGGER.info("tinyURl {} was clicked from ip address = {} ", tinyUrl, metaData.getMetaDataValue("ip"));
         String[] tinyUrlTokens = tinyUrl.trim().split("//")[1].split("/");

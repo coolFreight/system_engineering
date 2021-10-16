@@ -15,7 +15,6 @@ plugins {
     
 }
 
-
 run {
     standardInput = System.in
 }

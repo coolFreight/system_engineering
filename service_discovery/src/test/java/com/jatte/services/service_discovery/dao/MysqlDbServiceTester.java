@@ -1,16 +1,22 @@
 package com.jatte.services.service_discovery.dao;
 
-import org.junit.*;
 import com.jatte.services.service_discovery.model.RegisteredService;
 import com.jatte.services.service_discovery.model.Service;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+@Disabled
 public class MysqlDbServiceTester {
     private ServiceRegistryDao mysqlServiceRegistyDao;
 
-    @Before
+    @BeforeEach
     public void setup() throws SQLException {
         mysqlServiceRegistyDao = new MySqlServiceRegistryDaoImpl();
     }
@@ -20,9 +26,9 @@ public class MysqlDbServiceTester {
         List<Service> services = List.of(new Service("order-tinyurl.service-1", "localhost", "healthCheck"),
                 new Service("payment-tinyurl.service", "localhost", "healthCheck"),
                 new Service("order-tinyurl.service-1", "localhost", "healthCheck"));
-        Assert.assertFalse(mysqlServiceRegistyDao.registerService(services));
+        assertFalse(mysqlServiceRegistyDao.registerService(services));
         RegisteredService registeredService = mysqlServiceRegistyDao.queryServiceIp("order-tinyurl.service-1");
-        Assert.assertNull(registeredService);
+        assertNull(registeredService);
     }
 
     @Test
@@ -32,12 +38,12 @@ public class MysqlDbServiceTester {
                 new Service("order-tinyurl.service-2", "localhost", "healthCheck"));
         mysqlServiceRegistyDao.registerService(services);
         RegisteredService registeredService = mysqlServiceRegistyDao.queryServiceIp("order-tinyurl.service-2");
-        Assert.assertEquals("order-tinyurl.service-2", registeredService.getServiceName());
-        Assert.assertEquals("localhost", registeredService.getUrl());
-        Assert.assertEquals(null, registeredService.getUptime());
+        assertEquals("order-tinyurl.service-2", registeredService.getServiceName());
+        assertEquals("localhost", registeredService.getUrl());
+        assertEquals(null, registeredService.getUptime());
     }
 
-    @After
+    @AfterEach
     public void cleanUpDB() throws SQLException {
         mysqlServiceRegistyDao.removeService("order-tinyurl.service-1");
         mysqlServiceRegistyDao.removeService("payment-tinyurl.service");

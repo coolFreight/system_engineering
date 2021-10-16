@@ -7,12 +7,12 @@
  */
 
 plugins {
-    // Apply the java plugin to add support for Java
-    id 'java'
+// Apply the java plugin to add support for Java
+id 'java'
 
-    // Apply the application plugin to add support for building an application
-    id 'application'
-    
+// Apply the application plugin to add support for building an application
+id 'application'
+
 }
 
 
@@ -22,11 +22,11 @@ repositories {
     jcenter()
 }
 
-dependencies {
-    // This dependency is found on compile classpath of this component and consumers.
-    implementation 'com.google.guava:guava:26.0-jre'
+    dependencies {
+        // This dependency is found on compile classpath of this component and consumers.
+        implementation 'com.google.guava:guava:26.0-jre'
 
-    // Use JUnit test framework
+        // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'javax.xml', name: 'jaxb-impl', version: '2.1'

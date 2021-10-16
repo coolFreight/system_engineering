@@ -19,9 +19,9 @@ public class CreateURLConsumer {
     private final static String CREATE_TINY_URL_IN = "create_tiny_url_in";
 
 
-    private TinyUrlService tinyUrlService;
+    private SimpleTinyUrlResource tinyUrlService;
 
-    public void setTinyUrlService(TinyUrlService tinyUrlService) {
+    public void setTinyUrlService( SimpleTinyUrlResource tinyUrlService) {
         this.tinyUrlService = tinyUrlService;
     }
 

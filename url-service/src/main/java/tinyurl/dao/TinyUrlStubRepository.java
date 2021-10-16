@@ -1,7 +1,7 @@
 package tinyurl.dao;
 
 import org.slf4j.Logger;
-import tinyurl.service.SimpleTinyUrlService;
+import tinyurl.service.SimpleTinyUrlResource;
 import tinyurl.service.model.TinyUrlClickedMetaData;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * This would never be an ideal solution for a project of this magnitude for many reasons.
  */
 public class TinyUrlStubRepository implements UrlRepository {
-    private static final Logger LOGGER = getLogger(SimpleTinyUrlService.class);
+    private static final Logger LOGGER = getLogger(SimpleTinyUrlResource.class);
 
     private Map<Long, TinyUrlEntry> tinyURls = new ConcurrentHashMap<>();
 

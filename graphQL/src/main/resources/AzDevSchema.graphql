@@ -1,0 +1,27 @@
+type User {
+    id: ID!
+    createdAt: String!
+    username: String!
+    name: String
+
+    # More fields for a User object
+}
+
+type Task {
+    id: ID!
+    createdAt: String!
+    content: String!
+
+    # More fields for a Task object
+}
+
+type Approach {
+    id: ID!
+    createdAt: String!
+    content: String!
+
+    # More fields for an Approach object
+}”
+
+Excerpt From: Samer Buna. “GraphQL in Action.” Apple Books.
+}

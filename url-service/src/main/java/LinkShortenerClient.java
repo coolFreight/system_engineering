@@ -11,8 +11,7 @@ import tinyurl.dao.TinyUrlDBRepository;
 import tinyurl.dao.UrlRepository;
 import tinyurl.service.CreateTinyUrl;
 import tinyurl.service.CreateURLConsumer;
-import tinyurl.service.SimpleTinyUrlService;
-import tinyurl.service.TinyUrlService;
+import tinyurl.service.SimpleTinyUrlResource;
 import tinyurl.service.model.TinyUrlClickedMetaData;
 import tinyurl.textManipulation.TextReplaceScanner;
 import tinyurl.textManipulation.TinyURLTextReplaceScanner;
@@ -46,7 +45,7 @@ public class LinkShortenerClient {
     public static void main(String[] args) throws Exception {
         TinyUrlCodec<Long, String> urlEncoder = new SimpleTinyUrlCodec();
         UrlRepository urlRepository = new TinyUrlDBRepository();
-        TinyUrlService tinyUrlService = new SimpleTinyUrlService(urlRepository, urlEncoder);
+        SimpleTinyUrlResource tinyUrlService = new SimpleTinyUrlResource(urlRepository, urlEncoder);
         TextReplaceScanner tinyUrlTextReplaceScanner = new TinyURLTextReplaceScanner(tinyUrlService);
 
         if (args.length == 0) {

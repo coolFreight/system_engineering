@@ -2,7 +2,7 @@ package tinyurl.textManipulation;
 
 import org.slf4j.Logger;
 import tinyurl.service.CreateTinyUrl;
-import tinyurl.service.TinyUrlService;
+import tinyurl.service.SimpleTinyUrlResource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class TinyURLTextReplaceScanner implements TextReplaceScanner{
 
     private static final Logger LOGGER = getLogger(TinyURLTextReplaceScanner.class);
 
-    private TinyUrlService tinyUrlService;
+    private SimpleTinyUrlResource tinyUrlService;
     private static final String TINY_URL_HOST = "https://sk.sh/";
     private static List<Pattern> urlPatterns = new ArrayList<>();
     private Pattern patternOfTinyUrl = Pattern.compile("^".concat(TINY_URL_HOST).concat("\\S+"));
@@ -47,7 +47,7 @@ public class TinyURLTextReplaceScanner implements TextReplaceScanner{
         return  word;
     };
 
-    public TinyURLTextReplaceScanner (TinyUrlService tinyUrlService) {
+    public TinyURLTextReplaceScanner (SimpleTinyUrlResource tinyUrlService) {
         this.tinyUrlService = tinyUrlService;
     }
 

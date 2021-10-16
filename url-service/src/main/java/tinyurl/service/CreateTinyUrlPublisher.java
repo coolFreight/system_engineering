@@ -16,10 +16,10 @@ public class CreateTinyUrlPublisher {
 
     private Producer p;
     private final static String CREATE_TINY_URL_OUT = "create_tiny_url_out";
-    private TinyUrlService tinyUrlService;
+    private SimpleTinyUrlResource tinyUrlService;
 
 
-    public void setTinyUrlService(TinyUrlService tinyUrlService) {
+    public void setTinyUrlService(SimpleTinyUrlResource tinyUrlService) {
         this.tinyUrlService = tinyUrlService;
     }
 
