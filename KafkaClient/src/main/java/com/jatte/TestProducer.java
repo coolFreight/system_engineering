@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Properties;
+import java.util.UUID;
 
 public class TestProducer {
 
@@ -19,11 +20,18 @@ public class TestProducer {
             Properties properties = new Properties();
             properties.load(fis);
             p = new KafkaProducer(properties);
-            p.send(new ProducerRecord<>("test", "4", "from intelli-j "+ LocalDateTime.now()));
-            p.close();
+            int count = 0;
+            while(true) {
+                var key = UUID.randomUUID().toString().concat("___"+count);
+                p.send(new ProducerRecord<>("test", null,  count+""));
+                count++;
+                Thread.sleep(3000);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
