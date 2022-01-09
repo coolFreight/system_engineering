@@ -3,6 +3,8 @@ package com.jatte;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +17,7 @@ import java.util.Properties;
 public class TestConsumer_1_1_no_restart {
 
     private Consumer consumer;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestConsumer_1_1_no_restart.class);
 
     public void consume() {
         Properties properties = null;
@@ -27,6 +30,7 @@ public class TestConsumer_1_1_no_restart {
                 consumer.subscribe(Arrays.asList("test"));
 //                System.out.println("Partitions assigned "+consumer.toString());
                 while (true) {
+                    LOGGER.info("Calling poll.........");
                     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));
 //                    consumer.assignment().stream().forEach(p -> System.out.print(p + ","));
 //                    System.out.println();
@@ -50,6 +54,10 @@ public class TestConsumer_1_1_no_restart {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            }catch (Exception e) {
+                LOGGER.info("I caught some error ", e);
+            }finally {
+                consumer.close();
             }
         }
     }

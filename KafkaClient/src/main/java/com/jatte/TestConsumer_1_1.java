@@ -3,6 +3,8 @@ package com.jatte;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.io.FileInputStream;
@@ -14,6 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class TestConsumer_1_1 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestConsumer_1_1.class);
 
     private Consumer consumer;
 
@@ -37,11 +40,11 @@ public class TestConsumer_1_1 {
                         var partitions = records.partitions();
                         for (TopicPartition topicPartition : partitions) {
                             for (ConsumerRecord<String, String> record : records.records(topicPartition)) {
-                                System.out.printf("At %s, partition=%s, offset=%d, key=%s, value=%s, %s of batch size %s%n",  DateTime.now(), topicPartition, record.offset(), record.key(), record.value(), recordCount, batchSize);
+                                System.out.printf("At %s, partition=%s, offset=%d, key=%s, value=%s, %s of batch size %s%n", DateTime.now(), topicPartition, record.offset(), record.key(), record.value(), recordCount, batchSize);
                                 if (Integer.parseInt(record.value()) % 1000 == 0) {
                                     Thread.sleep(sleep);
                                 }
-                                consumer.commitSync(Map.of(topicPartition, new OffsetAndMetadata(record.offset() + 1, "Committing from "+this.getClass().getCanonicalName()+" at "+ DateTime.now())));
+                                consumer.commitSync(Map.of(topicPartition, new OffsetAndMetadata(record.offset() + 1, "Committing from " + this.getClass().getCanonicalName() + " at " + DateTime.now())));
                             }
                         }
                     } else {
@@ -55,12 +58,9 @@ public class TestConsumer_1_1 {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (Exception e) {
+                LOGGER.info("I caught some error ", e);
+            } finally {
                 consumer.close();
-                e.printStackTrace();
-                System.err.println("Error caught");
-                sleep();
-                consumer = new KafkaConsumer(properties);
-                consumer.subscribe(Arrays.asList("test"));
             }
         }
     }
